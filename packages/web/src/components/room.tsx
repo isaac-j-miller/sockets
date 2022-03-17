@@ -8,7 +8,7 @@ import { isValidRoomId } from "common/util/room-id";
 import { PointerBase, PointerDef } from "common/types";
 import { InnerRoom } from "./inner-room";
 
-const getSelfPointer = (): PointerDef => {
+const getSelfPointer = (): Omit<PointerDef, "color"> => {
   const docCookie = document.cookie;
   const parsed = cookie.parse(docCookie);
   const pointerCookie = parsed.pointer;
@@ -20,7 +20,6 @@ const getSelfPointer = (): PointerDef => {
     };
   }
   const cookieVals = {
-    color: "#000000",
     id: v4(),
   };
   document.cookie = cookie.serialize("pointer", JSON.stringify(cookieVals), {

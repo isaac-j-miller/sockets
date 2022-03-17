@@ -28,3 +28,10 @@ export function isValidRoomId(roomId: unknown | undefined): roomId is string {
   }
   return !!roomId && roomId.length === 6 && /^(?:[a-z]|[A-Z]|[0-9])+$/.test(roomId);
 }
+
+export function getColor(): string {
+  const r = getRandomInRange([0, 255]);
+  const g = getRandomInRange([0, 255]);
+  const b = getRandomInRange([0, 255]);
+  return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
+}

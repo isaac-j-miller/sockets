@@ -7,10 +7,12 @@ type Props = {
   color: string;
 };
 
+const size = 10;
+
 const Ptr = styled.div<{ color: string }>`
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: ${size}px;
+  height: ${size}px;
   display: block;
   transform: translate("-50%", "-50%");
   border-radius: 100%;
@@ -21,7 +23,7 @@ const Ptr = styled.div<{ color: string }>`
 export const Pointer: React.FC<Props> = ({ coordinates, id, color }) => {
   return (
     <Ptr
-      style={{ left: `${coordinates[0] - 10}px`, top: `${coordinates[1] - 10}px` }}
+      style={{ left: `${coordinates[0] - size}px`, top: `${coordinates[1] - size}px` }}
       color={color}
       id={`ptr#${id}`}
     ></Ptr>

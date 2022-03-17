@@ -7,7 +7,7 @@ import { Pointer } from "./pointer";
 type Props = {
   socket: Socket;
   roomId: string;
-  ptr: PointerDef;
+  ptr: Omit<PointerDef, "color">;
 };
 
 const xMax = 1000;
@@ -38,14 +38,14 @@ export const InnerRoom: React.FC<Props> = ({ socket, ptr: selfPointer }) => {
   const listenForMouseEvts = (evt: MouseEvent): any => {
     const x = coerce(0, xMax, evt.clientX);
     const y = coerce(0, yMax, evt.clientY);
-    selfPointer = {
-      ...(ptrsRef.current[selfPointer.id] ?? selfPointer),
+    const ptr: PointerDef = {
+      ...(ptrsRef.current[selfPointer.id] ?? { ...selfPointer, color: "#000000" }),
       coordinates: [x, y],
     };
     const ptrs = { ...ptrsRef.current };
-    ptrs[selfPointer.id] = selfPointer;
+    ptrs[selfPointer.id] = ptr;
     setPointers(ptrs);
-    socket.emit("UPDATE", selfPointer);
+    socket.emit("UPDATE", ptr);
   };
 
   useEffect(() => {
@@ -56,9 +56,6 @@ export const InnerRoom: React.FC<Props> = ({ socket, ptr: selfPointer }) => {
     socket.once("INITIAL_STATE", (state: RoomState) => {
       console.info("rcvd init state", state);
       const ptrs: PointerMap = { ...state.pointers, ...pointers };
-      if (!ptrs[selfPointer.id]) {
-        ptrs[selfPointer.id] = selfPointer;
-      }
       setPointers(ptrs);
     });
     socket.on("UPDATE", (evt: PointerDef) => {

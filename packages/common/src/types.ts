@@ -1,9 +1,9 @@
 export type Coordinates = [number, number];
 export type PointerDef = PointerBase & {
+  color: string;
   coordinates: Coordinates;
 };
 export type PointerBase = {
-  color: string;
   id: string;
 };
 export type PointerMap = Record<string, PointerDef>;
