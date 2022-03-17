@@ -89,6 +89,7 @@ export const InnerRoom: React.FC<Props> = ({ socket }) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       elementRef.current!.removeEventListener("mousemove", listenForMouseEvts);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elementRef, socket]);
 
   return (
