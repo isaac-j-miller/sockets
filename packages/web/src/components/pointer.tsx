@@ -12,7 +12,7 @@ const Ptr = styled.div<{ color: string }>`
   width: 10px;
   height: 10px;
   display: block;
-  transform: translate("50%", "50%");
+  transform: translate("-50%", "-50%");
   border-radius: 100%;
   border: solid black 1px;
   background-color: ${props => props.color};
@@ -21,7 +21,7 @@ const Ptr = styled.div<{ color: string }>`
 export const Pointer: React.FC<Props> = ({ coordinates, id, color }) => {
   return (
     <Ptr
-      style={{ left: `${coordinates[0]}px`, top: `${coordinates[1]}px` }}
+      style={{ left: `${coordinates[0] - 10}px`, top: `${coordinates[1] - 10}px` }}
       color={color}
       id={`ptr#${id}`}
     ></Ptr>

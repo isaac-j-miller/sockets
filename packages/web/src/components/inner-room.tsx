@@ -1,49 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Socket } from "socket.io-client";
-import cookie from "cookie";
-import { v4 } from "uuid";
-import { PointerDef, PointerBase, PointerMap, RoomState } from "common/types";
+import { PointerDef, PointerMap, RoomState } from "common/types";
 import { Pointer } from "./pointer";
 
 type Props = {
   socket: Socket;
   roomId: string;
+  ptr: PointerDef;
+};
+
+const xMax = 1000;
+const yMax = 1000;
+
+const coerce = (min: number, max: number, value: number) => {
+  if (value > max) return max;
+  if (value < min) return min;
+  return value;
 };
 
 const RoomCanvas = styled.div`
-  width: 1000px;
-  height: 1000px;
+  width: ${xMax}px;
+  height: ${yMax}px;
   position: relative;
   border: 1px solid black;
 `;
 
-const getSelfPointer = (): PointerDef => {
-  const docCookie = document.cookie;
-  const parsed = cookie.parse(docCookie);
-  const pointerCookie = parsed.pointer;
-  if (pointerCookie) {
-    const parsedPointer: PointerBase = JSON.parse(pointerCookie);
-    return {
-      ...parsedPointer,
-      coordinates: [0, 0],
-    };
-  }
-  const cookieVals = {
-    color: "#000000",
-    id: v4(),
-  };
-  document.cookie = cookie.serialize("pointer", JSON.stringify(cookieVals), {
-    sameSite: true,
-  });
-  return {
-    coordinates: [0, 0],
-    ...cookieVals,
-  };
-};
-let selfPointer = getSelfPointer();
-
-export const InnerRoom: React.FC<Props> = ({ socket }) => {
+export const InnerRoom: React.FC<Props> = ({ socket, ptr: selfPointer }) => {
   const elementRef = useRef<HTMLDivElement>();
   const [pointers, _setPointers] = useState<PointerMap>({});
   const ptrsRef = React.useRef(pointers);
@@ -53,8 +36,8 @@ export const InnerRoom: React.FC<Props> = ({ socket }) => {
   };
 
   const listenForMouseEvts = (evt: MouseEvent): any => {
-    const x = evt.clientX;
-    const y = evt.clientY;
+    const x = coerce(0, xMax, evt.clientX);
+    const y = coerce(0, yMax, evt.clientY);
     selfPointer = {
       ...(ptrsRef.current[selfPointer.id] ?? selfPointer),
       coordinates: [x, y],
@@ -89,7 +72,7 @@ export const InnerRoom: React.FC<Props> = ({ socket }) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       elementRef.current!.removeEventListener("mousemove", listenForMouseEvts);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elementRef, socket]);
 
   return (
