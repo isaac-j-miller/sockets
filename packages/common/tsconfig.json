@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["scripthost", "dom", "es2019"],
+    "outDir": "./dist",
+    "types": ["node", "jest"],
+    "rootDir": "../../packages",
+    "typeRoots": ["../../node_modules/@types"],
+    "paths": {
+      "common/*": ["./packages/common/src/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/node_modules/**"]
+}
