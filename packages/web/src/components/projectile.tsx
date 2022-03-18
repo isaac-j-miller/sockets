@@ -5,7 +5,7 @@ type Props = {
   coordinates: [number, number];
   id: string;
   color: string;
-  angle: number;
+  vector: [number, number];
 };
 
 const size = 10;
@@ -13,24 +13,23 @@ const size = 10;
 const Ptr = styled.div<{ color: string; angle: number }>`
   position: absolute;
   width: ${size}px;
-  height: ${size * 2}px;
+  height: 1px;
   display: block;
   transform: ${({ angle }) => `translate(-50%, -50%) rotate(${angle}rad)`};
-  border-radius: 100%;
-  border: solid black 1px;
   background-color: ${props => props.color};
 `;
 
-export const Pointer: React.FC<Props> = ({ coordinates, id, color, angle }) => {
+export const Projectile: React.FC<Props> = ({ coordinates, id, color, vector }) => {
+  const angle = Math.atan(vector[1] / vector[0]);
   return (
     <Ptr
       style={{
         left: `${coordinates[0] - size}px`,
         top: `${coordinates[1] - size}px`,
       }}
-      angle={angle}
+      angle={Number.isNaN(angle) ? 0 : angle}
       color={color}
-      id={`ptr#${id}`}
+      id={`projectile#${id}`}
     ></Ptr>
   );
 };

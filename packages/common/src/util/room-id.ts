@@ -33,5 +33,7 @@ export function getColor(): string {
   const r = getRandomInRange([0, 255]);
   const g = getRandomInRange([0, 255]);
   const b = getRandomInRange([0, 255]);
-  return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b
+    .toString(16)
+    .padStart(2, "0")}`;
 }
